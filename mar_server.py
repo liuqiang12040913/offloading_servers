@@ -145,7 +145,11 @@ if __name__ == "__main__":
             global_database = pickle.load(handler)
     except: pass
     try:
-        with open(CWD+'offloading_servers/global_database.pkl', 'rb') as handler:
+        with open(CWD+'/offloading_servers/global_database.pkl', 'rb') as handler:
+            global_database = pickle.load(handler)
+    except: pass 
+    try:
+        with open('global_database.pkl', 'rb') as handler:
             global_database = pickle.load(handler)
     except: pass 
     try:
