@@ -149,6 +149,10 @@ if __name__ == "__main__":
             global_database = pickle.load(handler)
     except: pass 
     try:
+        with open(CWD+'offloading_servers/global_database.pkl', 'rb') as handler:
+            global_database = pickle.load(handler)
+    except: pass 
+    try:
         with open('global_database.pkl', 'rb') as handler:
             global_database = pickle.load(handler)
     except: pass 
@@ -161,9 +165,7 @@ if __name__ == "__main__":
     while True:
         print("waiting for client connection...")
         client, addr = s.accept()  # accept client
-        client.settimeout(5)
         print ("Get new user socket")
-    
 
         StartTime = time.time()
         # if client connected, keeping processing its data
@@ -176,17 +178,17 @@ if __name__ == "__main__":
             
             ProcessTime = time.time()
             match_id = process(feature_extractor, matcher, decimg) # process the img
-            print(str(time.time() - ProcessTime), end=' ')  # print result
+            latency = int(1000*(time.time() - StartTime))/1000 # ms level 
+            print(latency, end=' ', flush=True)  # print result
 
-            INFOS.append(time.time() - StartTime) # record info, latency
-
-            # print(str(time.time() - StartTime), end=' ')  # print result
+            INFOS.append(latency) # record info, latency
+            StartTime = time.time() # reset start time
 
             str1 = str(match_id) + '\n'  # prepare data
 
             client.sendall(str1.encode()) # send back to client
 
-            StartTime = time.time() # reset start time
+            
         
         client.close()
 
