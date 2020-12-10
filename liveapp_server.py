@@ -8,7 +8,7 @@ from flask_api import FlaskAPI, status, exceptions
 HOST = '0.0.0.0'
 REST_PORT = 9999
 
-rtmp_server = 'rtmp://0.0.0.0/LiveApp/1'
+rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
 
 INFOS = [10]
 
