@@ -6,7 +6,7 @@ from flask import request, url_for
 from flask_api import FlaskAPI, status, exceptions
 
 HOST = '0.0.0.0'
-REST_PORT = 9999
+REST_PORT = 10002
 
 rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
 

@@ -9,7 +9,7 @@ from os.path import isfile, join
 
 HOST = '0.0.0.0'
 USER_PORT = 9001
-REST_PORT = 9999
+REST_PORT = 10001
 BUFFER_SIZE = 256
 SIZE = 100 # number of comparing images
 SOCKET_TIME_OUT = 10

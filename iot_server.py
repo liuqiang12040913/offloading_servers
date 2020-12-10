@@ -8,8 +8,8 @@ from os import listdir
 from os.path import isfile, join
 
 HOST = '0.0.0.0'
-USER_PORT = 9001
-REST_PORT = 9999
+USER_PORT = 9003
+REST_PORT = 10003
 BUFFER_SIZE = 256
 SIZE = 100 # number of comparing images
 SOCKET_TIME_OUT = 10
