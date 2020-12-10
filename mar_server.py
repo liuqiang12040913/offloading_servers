@@ -60,10 +60,10 @@ def recv_image_from_socket(client):
     return decimg
 
 
-def process(feature_extractor, matcher, image):
+def process(feature_extractor, matcher, image, database):
 
     latent = feature_extractor.inference(image)    
-    obj_id = sub_process_matching(latent, global_database, matcher)
+    obj_id = sub_process_matching(latent, database, matcher)
 
     return obj_id
 
@@ -89,13 +89,13 @@ class ORB:
         return des
 
 
-def sub_process_matching(features, global_database, matcher):
+def sub_process_matching(features, database, matcher):
     # given an object (loc, latent), find the corresponding object in global_database
     # the geo-distance should be smaller than NEARBY_DIST, and then find the minimum latent one
     # if not found, then report a new object detected.
     obj_id, min_aug_dist = 0, 1e9
 
-    for key, latent in global_database.items():
+    for key, latent in database.items():
         # where latent vector could be just a vector or a multi-vector due to orb detection            
         matches = matcher.match(latent, features) # store the latent dist
         avg_distance = np.mean([match.distance for match in matches])
@@ -113,7 +113,12 @@ def start_rest_api():
 
 
 if __name__ == "__main__":
-
+    if len(sys.argv) == 1:
+        max_img_numbers = 9999
+    elif len(sys.argv) == 2:
+        max_img_numbers = int(sys.argv[1])
+    else:
+        raise ValueError
     # start rest api server
     t1 = threading.Thread(target = start_rest_api)
     t1.setDaemon(True)
@@ -160,7 +165,13 @@ if __name__ == "__main__":
         with open('global_database.pkl', 'rb') as handler:
             global_database = pickle.load(handler)
     except: pass 
-    print(len(global_database)) # if no global_database loaded, then report error
+
+    database = {}
+    for key, val in global_database.items():
+        database[key] = val # get the value
+        if len(database)>=max_img_numbers: break
+
+    print('database length is ', len(database)) # if no global_database loaded, then report error
     # main loop for all incoming client
     while True:
         print("waiting for client connection...")
@@ -177,7 +188,7 @@ if __name__ == "__main__":
                 break
             
             ProcessTime = time.time()
-            match_id = process(feature_extractor, matcher, decimg) # process the img
+            match_id = process(feature_extractor, matcher, decimg, database) # process the img
             latency = int(1000*(time.time() - StartTime))/1000 # ms level 
             print(latency, end=' ', flush=True)  # print result
 
