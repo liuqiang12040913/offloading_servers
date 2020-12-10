@@ -8,10 +8,9 @@ from flask_api import FlaskAPI, status, exceptions
 HOST = '0.0.0.0'
 REST_PORT = 9999
 
-rtmp_server = 'rtmp://127.0.0.1/LiveApp/v'
-STREAM_FPS = 10
+rtmp_server = 'rtmp://127.0.0.1/LiveApp/1'
 
-INFOS = [0.1]
+INFOS = [10]
 
 server = FlaskAPI(__name__)
 
@@ -25,54 +24,45 @@ def function():
 def start_rest_api():
     server.run(host=HOST,port=REST_PORT)
     print('completed!')
+   
 
-def background_retrieve_fps(server):
-    global STREAM_FPS
+if __name__ == "__main__":
+
+    # start rest api server
+    t1 = threading.Thread(target = start_rest_api)
+    t1.setDaemon(True)
+    t1.start()
+
     command = 'ffmpeg  -i ' + server + ' -f null -'
     print(command)
 
-    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,universal_newlines=True)
+    process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
 
     # for line in process.stdout:
     #     print(line)
 
     while True:
-        fps = 10 # default
-        outputs = process.stdout.readline().split() 
+        outputs = process.stdout.readline().split() # split command line output
         idx_fps, idx_speed, idx_bitrate = -1, -1, -1
 
         for i, out in enumerate(outputs):
-            if out.find('fps')!=-1:
+            if out.find('fps') != -1:
                 idx_fps = i
-            if out.find('speed')!=-1:
+            if out.find('speed') != -1:
                 idx_speed = i
-            if out.find('bitrate')!=-1:
+            if out.find('bitrate') != -1:
                 idx_bitrate = i
 
-        if idx_bitrate!= -1:
+        if idx_bitrate!= -1: # in real, it does not have bitrate output
             try:
                 print(float(outputs[idx_bitrate+1].split('=')[-1]))
             except: pass
 
-        if idx_fps!=-1 and idx_speed!=-1:
+        if idx_fps!=-1 and idx_speed!=-1: # if found fps, then append to INFOS
             try:
-                STREAM_FPS = float(outputs[idx_fps + 1]) / float(outputs[idx_speed].split('=')[-1].split('x')[0])
+                INFOS.append( float(outputs[idx_fps + 1]) / float(outputs[idx_speed].split('=')[-1].split('x')[0]) )
             except:
                 pass
-
-
-t1 = threading.Thread(target = background_retrieve_fps, args=(rtmp_server,))
-t1.setDaemon(True)
-t1.start()
-
-# start rest api server
-t2 = threading.Thread(target = start_rest_api)
-t2.setDaemon(True)
-t2.start()
-
-while True:
-    time.sleep(1)
-    print(STREAM_FPS)
 
 
 
