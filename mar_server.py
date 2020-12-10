@@ -7,7 +7,7 @@ from flask_api import FlaskAPI, status, exceptions
 from os import listdir
 from os.path import isfile, join
 
-HOST = ''
+HOST = '0.0.0.0'
 USER_PORT = 9001
 REST_PORT = 9999
 BUFFER_SIZE = 256
@@ -107,7 +107,7 @@ def sub_process_matching(features, global_database, matcher):
 
 
 def start_rest_api():
-    server.run(port=REST_PORT)
+    server.run(host=HOST,port=REST_PORT)
     print('completed!')
 
 

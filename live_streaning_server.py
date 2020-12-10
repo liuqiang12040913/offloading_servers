@@ -5,9 +5,11 @@ import numpy as np
 from flask import request, url_for
 from flask_api import FlaskAPI, status, exceptions
 
+HOST = '0.0.0.0'
+REST_PORT = 9999
+
 rtmp_server = 'rtmp://127.0.0.1/LiveApp/v'
 STREAM_FPS = 10
-REST_PORT = 9999
 
 INFOS = [0.1]
 
@@ -21,7 +23,7 @@ def function():
     return {'data':avg_data}, status.HTTP_200_OK
 
 def start_rest_api():
-    server.run(port=REST_PORT)
+    server.run(host=HOST,port=REST_PORT)
     print('completed!')
 
 def background_retrieve_fps(server):
