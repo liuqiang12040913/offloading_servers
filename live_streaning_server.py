@@ -33,7 +33,7 @@ if __name__ == "__main__":
     t1.setDaemon(True)
     t1.start()
 
-    command = 'ffmpeg  -i ' + server + ' -f null -'
+    command = 'ffmpeg  -i ' + rtmp_server + ' -f null -'
     print(command)
 
     process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
