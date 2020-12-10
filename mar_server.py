@@ -140,7 +140,7 @@ if __name__ == "__main__":
     # with open('global_database.pkl', 'wb') as handler:
     #     pickle.dump(global_database, handler)
 
-    with open(CWD+'global_database.pkl', 'rb') as handler:
+    with open(CWD+'/global_database.pkl', 'rb') as handler:
         global_database = pickle.load(handler)
     # main loop for all incoming client
     while True:
