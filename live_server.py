@@ -23,7 +23,7 @@ def function():
     global INFOS
     avg_data = np.mean(INFOS) # get average 
     INFOS = [INFOS[-1]] # reset the data
-    return {'data':avg_data}, status.HTTP_200_OK
+    return str(avg_data), status.HTTP_200_OK
 
 def start_ffmpeg_stream():
     command = 'ffmpeg -re -i ' + VIDEO_PATH + ' -c copy -f flv ' + rtmp_server

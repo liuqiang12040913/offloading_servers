@@ -24,7 +24,7 @@ def function():
     global INFOS
     avg_data = np.mean(INFOS) # get average 
     INFOS = [INFOS[-1]] # reset the data
-    return {'data':avg_data}, status.HTTP_200_OK
+    return str(avg_data), status.HTTP_200_OK
 
 def recv_image_from_socket(client):
     start_time = time.time() # time when recv starts
