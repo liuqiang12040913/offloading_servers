@@ -1,5 +1,6 @@
 import socket, time, sys, struct
 import string, time
+import subprocess
 import threading
 import numpy as np
 from flask import request, url_for
@@ -10,6 +11,7 @@ USER_PORT = 9002
 REST_PORT = 10002
 BUFFER_SIZE = 256
 SOCKET_TIME_OUT = 10
+VIDEO_PATH = '/1.mp4'
 
 rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
 INFOS = [10]
@@ -22,6 +24,12 @@ def function():
     avg_data = np.mean(INFOS) # get average 
     INFOS = [INFOS[-1]] # reset the data
     return {'data':avg_data}, status.HTTP_200_OK
+
+def start_ffmpeg_stream():
+    command = 'ffmpeg -re -i ' + VIDEO_PATH + ' -c copy -f flv ' + rtmp_server
+    while True:
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+    print('completed!')
 
 def start_rest_api():
     server.run(host=HOST,port=REST_PORT)
@@ -46,6 +54,11 @@ def recv_request_from_socket(client):
 
 if __name__ == "__main__":
 
+    # start rest api server
+    t0 = threading.Thread(target = start_ffmpeg_stream)
+    t0.setDaemon(True)
+    t0.start()
+    
     # start rest api server
     t1 = threading.Thread(target = start_rest_api)
     t1.setDaemon(True)
