@@ -62,7 +62,7 @@ if __name__ == "__main__":
     while True:
         print("waiting for client connection...")
         client, addr = s.accept()  # accept client
-        client.settimeout(5)
+        client.settimeout(SOCKET_TIME_OUT)
         print ("Get new user socket")
     
         StartTime = time.time()
