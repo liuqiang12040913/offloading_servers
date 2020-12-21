@@ -80,7 +80,7 @@ if __name__ == "__main__":
             # print(str(time.time() - StartTime), end=' ')  # print result
 
             tmp_data = str(rgb[0]) + ',' + str(rgb[1]) + ',' + str(rgb[2])
-            reply_data = ',' + tmp_data  + '\n'  # prepare data, 128 bytes
+            reply_data = ',' + tmp_data * 199 + '\n'  # prepare data, 128 bytes
 
             client.sendall(reply_data.encode()) # send back to client
 
