@@ -79,7 +79,8 @@ if __name__ == "__main__":
             rgb = np.random.randint(0, 255, 3)
             # print(str(time.time() - StartTime), end=' ')  # print result
 
-            reply_data = str(rgb[0]) + ',' + str(rgb[1]) + ',' + str(rgb[2])  + ',\n'  # prepare data
+            tmp_data = str(rgb[0]) + ',' + str(rgb[1]) + ',' + str(rgb[2])+ ','
+            reply_data = tmp_data * 20 + '\n'  # prepare data, 128 bytes
 
             client.sendall(reply_data.encode()) # send back to client
 
