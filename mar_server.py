@@ -71,7 +71,7 @@ def process(feature_extractor, matcher, image, database):
 class ORB:
     def __init__(self,):
         # Initiate ORB detector
-        self.orb = cv2.ORB_create(edgeThreshold=3)
+        self.orb = cv2.ORB_create()
         # the default edgethreshold is 31, cannot detect keypoints
         # which is not suitable for small cropped image
         # reduce this value can apply to small image
@@ -85,6 +85,8 @@ class ORB:
         if des is None:
             # if no feature detected, then randomly generated 100 features.
             des = np.random.randint(0, 100, (100, 32), dtype=np.uint8)
+
+        des = des[:100] # max number of features
 
         return des
 
@@ -114,7 +116,7 @@ def start_rest_api():
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        max_img_numbers = 9999
+        max_img_numbers = 100
     elif len(sys.argv) == 2:
         max_img_numbers = int(sys.argv[1])
     else:
