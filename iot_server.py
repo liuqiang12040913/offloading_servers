@@ -48,7 +48,7 @@ def start_rest_api():
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        SEND_TIMES = 10
+        SEND_TIMES = 100
     elif len(sys.argv) == 2:
         SEND_TIMES = int(sys.argv[1])
     else:
