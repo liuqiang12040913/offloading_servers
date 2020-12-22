@@ -12,7 +12,7 @@ USER_PORT = 9003
 REST_PORT = 10003
 BUFFER_SIZE = 256
 SIZE = 100 # number of comparing images
-SOCKET_TIME_OUT = 10
+SOCKET_TIME_OUT = 100
 INFOS = [0.1]
 
 server = FlaskAPI(__name__)
@@ -47,6 +47,12 @@ def start_rest_api():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) == 1:
+        SEND_TIMES = 10
+    elif len(sys.argv) == 2:
+        SEND_TIMES = int(sys.argv[1])
+    else:
+        raise ValueError
 
     # start rest api server
     t1 = threading.Thread(target = start_rest_api)
@@ -79,10 +85,13 @@ if __name__ == "__main__":
             rgb = np.random.randint(0, 255, 3)
             # print(str(time.time() - StartTime), end=' ')  # print result
 
-            tmp_data = str(rgb[0]) + ',' + str(rgb[1]) + ',' + str(rgb[2])
-            reply_data = ',' + tmp_data * 199 + '\n'  # prepare data, 128 bytes
+            real_data = str(rgb[0]) + ',' + str(rgb[1]) + ',' + str(rgb[2]) + ',\n'
 
-            client.sendall(reply_data.encode()) # send back to client
+            encode_send_times = (str(SEND_TIMES)+'\n').encode() # the size of first packet
+
+            client.sendall(encode_send_times) # send first packet with size
+            for idx in range(SEND_TIMES):
+                client.sendall(real_data.encode()) # send back to client
 
             StartTime = time.time() # reset start time
         
