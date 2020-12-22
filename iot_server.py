@@ -12,7 +12,7 @@ USER_PORT = 9003
 REST_PORT = 10003
 BUFFER_SIZE = 256
 SIZE = 100 # number of comparing images
-SOCKET_TIME_OUT = 100
+SOCKET_TIME_OUT = 10
 INFOS = [0.1]
 
 server = FlaskAPI(__name__)
