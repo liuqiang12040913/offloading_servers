@@ -89,7 +89,7 @@ if __name__ == "__main__":
             encode_real_data = real_data.encode()
 
             send_times = int(PKT_SIZE / len(encode_real_data))
-            print("send times: ", send_times)
+            print(send_times, end=" ")
             encode_send_times = (str(send_times)+'\n').encode() # the size of first packet
 
             client.sendall(encode_send_times) # send first packet with size
