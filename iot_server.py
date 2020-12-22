@@ -48,9 +48,9 @@ def start_rest_api():
 
 if __name__ == "__main__":
     if len(sys.argv) == 1:
-        SEND_TIMES = 100
+        PKT_SIZE = 1000
     elif len(sys.argv) == 2:
-        SEND_TIMES = int(sys.argv[1])
+        PKT_SIZE = int(sys.argv[1])
     else:
         raise ValueError
 
@@ -86,12 +86,15 @@ if __name__ == "__main__":
             # print(str(time.time() - StartTime), end=' ')  # print result
 
             real_data = str(rgb[0]) + ',' + str(rgb[1]) + ',' + str(rgb[2]) + ',\n'
+            encode_real_data = real_data.encode()
 
-            encode_send_times = (str(SEND_TIMES)+'\n').encode() # the size of first packet
+            send_times = PKT_SIZE / len(encode_real_data)
+            print("send times: ", send_times)
+            encode_send_times = (str(send_times)+'\n').encode() # the size of first packet
 
             client.sendall(encode_send_times) # send first packet with size
-            for idx in range(SEND_TIMES):
-                client.sendall(real_data.encode()) # send back to client
+            for idx in range(send_times):
+                client.sendall(encode_real_data) # send back to client
 
             StartTime = time.time() # reset start time
         
