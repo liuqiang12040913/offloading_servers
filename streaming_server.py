@@ -17,7 +17,8 @@ server = FlaskAPI(__name__)
 @server.route("/", methods=['GET'])
 def function():
     global INFOS
-    avg_data = np.mean(INFOS) # get average 
+    useful_len = int(len(INFOS)*0.2) # last 80%
+    avg_data = np.mean(INFOS[useful_len:]) # get average 
     INFOS = [INFOS[-1]] # reset the data
     return str(avg_data), status.HTTP_200_OK
 
