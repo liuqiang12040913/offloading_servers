@@ -13,7 +13,7 @@ BUFFER_SIZE = 256
 SOCKET_TIME_OUT = 10
 MIN_RESOLUTION = 0 
 MAX_RESOLUTION = 9 
-VIDEO_PATH = '/'
+VIDEO_PATH = '/home/qiang/Desktop/'
 VIDEO_LENGTH = 10 # second
 IDX = 4 # medium to begin adapt
 Default_FPS = 60 - 5
@@ -36,17 +36,19 @@ def start_ffmpeg_stream():
     while True:
         stime = time.time()
         command = 'ffmpeg -re -i ' + VIDEO_PATH + str(IDX) + '.mp4 -c copy -f flv ' + rtmp_server
-        print(IDX, end=" ")
+        print("IDX:", IDX)
         process = subprocess.call(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
         
         # adjust IDX
         useful_len = int(len(FPS)*0.2)
-        if np.mean(FPS[useful_len:]) < Default_FPS:
+        avg_fps = np.mean(FPS[useful_len:])
+        if avg_fps < Default_FPS:
             IDX = np.clip(IDX-1, MIN_RESOLUTION, MAX_RESOLUTION) # decrease
-            count = 0
         else:
             IDX = np.clip(IDX+1, MIN_RESOLUTION, MAX_RESOLUTION) # increase
-            count = 0
+        print("Avg FPS:", avg_fps)
+
+        FPS = [0] # reset fps
         
         # print(time.time()-stime, flush=True)
 
