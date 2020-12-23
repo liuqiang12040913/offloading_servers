@@ -32,7 +32,7 @@ def function():
     return str(avg_data), status.HTTP_200_OK
 
 def start_ffmpeg_stream():
-    global IDX
+    global IDX, FPS
     while True:
         stime = time.time()
         command = 'ffmpeg -re -i ' + VIDEO_PATH + str(IDX) + '.mp4 -c copy -f flv ' + rtmp_server
