@@ -19,17 +19,13 @@ IDX = 4 # medium to begin adapt
 Default_FPS = 60 - 5
 
 rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
-INFOS = [IDX]
 FPS = [0]
 
 server = FlaskAPI(__name__)
 
 @server.route("/", methods=['GET'])
 def function():
-    global INFOS
-    avg_data = INFOS[-1] # the final resolution 
-    INFOS = [INFOS[-1]] # reset the data
-    return str(avg_data), status.HTTP_200_OK
+    return str(IDX), status.HTTP_200_OK
 
 def start_ffmpeg_stream():
     global IDX, FPS
