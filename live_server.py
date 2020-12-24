@@ -40,7 +40,7 @@ def start_ffmpeg_stream():
         avg_fps = np.mean(FPS[useful_len:])
         if avg_fps < Default_FPS:
             IDX = np.clip(IDX-1, MIN_RESOLUTION, MAX_RESOLUTION) # decrease
-        elif avg_fps > Default_FPS
+        elif avg_fps > Default_FPS:
             IDX = np.clip(IDX+1, MIN_RESOLUTION, MAX_RESOLUTION) # increase
         else: pass
 
