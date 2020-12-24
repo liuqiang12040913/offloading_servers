@@ -19,7 +19,7 @@ IDX = 4 # medium to begin adapt
 Default_FPS = 60 - 5
 
 rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
-FPS = [60]
+FPS = [Default_FPS]
 
 server = FlaskAPI(__name__)
 
@@ -43,7 +43,7 @@ def start_ffmpeg_stream():
         elif avg_fps > Default_FPS
             IDX = np.clip(IDX+1, MIN_RESOLUTION, MAX_RESOLUTION) # increase
         else: pass
-        
+
         print("Avg FPS:", avg_fps)
 
         FPS = [0] # reset fps
@@ -102,7 +102,8 @@ if __name__ == "__main__":
         while True:
             fps = recv_request_from_socket(client) # receive from client
 
-            if fps is False: 
+            if fps is False:
+                FPS.append(Default_FPS)
                 print("client droped, break, waiting other clients")
                 break
             
