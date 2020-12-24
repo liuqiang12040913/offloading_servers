@@ -91,7 +91,7 @@ if __name__ == "__main__":
     while True:
         print("waiting for client connection...")
         client, addr = s.accept()  # accept client
-        client.settimeout(SOCKET_TIME_OUT)
+        # client.settimeout(SOCKET_TIME_OUT)
         print ("Get new user socket")
         count = 0
 
