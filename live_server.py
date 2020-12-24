@@ -46,7 +46,7 @@ def start_ffmpeg_stream():
 
         print("Avg FPS:", avg_fps)
 
-        FPS = [0] # reset fps
+        FPS = [Default_FPS] # reset fps
         
         # print(time.time()-stime, flush=True)
 
