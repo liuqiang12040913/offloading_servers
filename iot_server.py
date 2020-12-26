@@ -39,8 +39,24 @@ def recv_request_from_socket(client):
             return False
 
     size, = struct.unpack('!i', buffers)
+    print ("receiving %d bytes", size)
+    recv_data = b''
+    while len(recv_data) < size:
+        try:
+            data = client.recv(1024)
+        except:
+            return False
+        recv_data += data
+        # if recv too long, then consider this user is disconnected
+        if time.time() - start_time >= SOCKET_TIME_OUT:
+            return False
 
-    return size
+    frame_data = recv_data[:size]
+    print ("recv data size: ", len(recv_data))
+
+    recvdata = np.frombuffer(frame_data, dtype='uint8')
+
+    return recvdata
 
 def start_rest_api():
     server.run(host=HOST, port=REST_PORT)
