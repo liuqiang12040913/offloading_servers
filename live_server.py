@@ -14,7 +14,6 @@ SOCKET_TIME_OUT = 10
 MIN_RESOLUTION = 0 
 MAX_RESOLUTION = 9 
 VIDEO_PATH = '/'
-VIDEO_LENGTH = 10 # second
 IDX = 4 # medium to begin adapt
 Default_FPS = 60 - 5
 
