@@ -15,7 +15,7 @@ MIN_RESOLUTION = 0
 MAX_RESOLUTION = 9 
 VIDEO_PATH = '/'
 IDX = 4 # medium to begin adapt
-Default_FPS = 60 - 5
+Default_FPS = 100 - 5
 
 rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
 FPS = [Default_FPS]
