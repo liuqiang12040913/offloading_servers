@@ -194,7 +194,7 @@ if __name__ == "__main__":
             match_id = process(feature_extractor, matcher, decimg, database) # process the img
             latency = int(1000*(time.time() - StartTime))/1000 # ms level 
             print(latency, end=' ', flush=True)  # print result
-            time.sleep(1) # sleep for 1 second and clean the radio channel buffer in case                         
+            #time.sleep(1) # sleep for 1 second and clean the radio channel buffer in case                         
             INFOS.append(latency) # record info, latency
             StartTime = time.time() # reset start time
 
