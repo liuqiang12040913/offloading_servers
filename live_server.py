@@ -108,9 +108,9 @@ if __name__ == "__main__":
             
             FPS.append(fps)  # record the fps
 
-            # reply_data = '8\n'
+            reply_data = '8\n'
 
-            # client.sendall(reply_data.encode()) # send back to client
+            client.sendall(reply_data.encode()) # send back to client
 
             StartTime = time.time() # reset start time
             count += 1
