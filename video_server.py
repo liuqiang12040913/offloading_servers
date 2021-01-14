@@ -15,7 +15,7 @@ MIN_RESOLUTION = 0
 MAX_RESOLUTION = 9 
 VIDEO_PATH = '/'
 IDX = 9 # medium to begin adapt
-Default_FPS = 100 - 5
+Default_FPS = 60 - 5
 
 rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
 FPS = [Default_FPS]
@@ -24,7 +24,12 @@ server = FlaskAPI(__name__)
 
 @server.route("/", methods=['GET'])
 def function():
-    if np.mean(FPS) >= Default_FPS: 
+    global FPS
+    avg_fps = np.mean(FPS)
+    FPS = [Default_FPS]
+    print(avg_fps)
+
+    if avg_fps > Default_FPS: 
         return str(1), status.HTTP_200_OK
     else:
         return str(0), status.HTTP_200_OK
@@ -33,7 +38,7 @@ def start_ffmpeg_stream():
     global IDX, FPS
     while True:
         command = 'ffmpeg -re -i ' + VIDEO_PATH + str(IDX) + '.mp4 -c copy -f flv ' + rtmp_server
-        process = subprocess.call(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
         
 def start_rest_api():
     server.run(host=HOST,port=REST_PORT)
@@ -94,9 +99,9 @@ if __name__ == "__main__":
             
             FPS.append(fps)  # record the fps
 
-            # reply_data = '8\n'
+            reply_data = '8\n'
 
-            # client.sendall(reply_data.encode()) # send back to client
+            client.sendall(reply_data.encode()) # send back to client
 
             StartTime = time.time() # reset start time
             count += 1
