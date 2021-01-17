@@ -11,39 +11,32 @@ USER_PORT = 9002
 REST_PORT = 10002
 BUFFER_SIZE = 256
 SOCKET_TIME_OUT = 10
-MIN_RESOLUTION = 0 
-MAX_RESOLUTION = 9 
 VIDEO_PATH = '/'
-IDX = 9 # medium to begin adapt
-Default_FPS = 60 - 5
+Default_HET = 200
 
-rtmp_server = 'rtmp://'+HOST+'/LiveApp/1'
-FPS = [Default_FPS]
+rtmp_server = 'rtmp://192.168.17.10/live/test'
+HET = [Default_HET]
 
 server = FlaskAPI(__name__)
 
 @server.route("/", methods=['GET'])
 def function():
-    global FPS
-    avg_fps = np.mean(FPS)
-    FPS = [Default_FPS]
-    print(avg_fps)
-
-    if avg_fps > Default_FPS: 
-        return str(1), status.HTTP_200_OK
-    else:
-        return str(0), status.HTTP_200_OK
-
+    global HET
+    print(np.mean(HET))
+    avg_het = HET[-1]
+    HET = [HET[-1]]
+    return str(avg_het), status.HTTP_200_OK
 def start_ffmpeg_stream():
-    global IDX, FPS
+    global HET
     while True:
-        command = 'ffmpeg -re -i ' + VIDEO_PATH + str(IDX) + '.mp4 -c copy -f flv ' + rtmp_server
-        process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
-        
+        command = 'ffmpeg -re -i ' + VIDEO_PATH + 'test.mp4 -c copy -f flv ' + rtmp_server
+
+        process = subprocess.call(command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, universal_newlines=True)
+
 def start_rest_api():
     server.run(host=HOST,port=REST_PORT)
     print('completed!')
-   
+
 def recv_request_from_socket(client):
     start_time = time.time() # time when recv starts
     buffers = b''
@@ -59,16 +52,14 @@ def recv_request_from_socket(client):
 
     size, = struct.unpack('!i', buffers)
 
-    return size    
-        
-
+    return size
 if __name__ == "__main__":
 
     # # start rest api server
-    t0 = threading.Thread(target = start_ffmpeg_stream)
-    t0.setDaemon(True)
-    t0.start()
-    
+    # t0 = threading.Thread(target = start_ffmpeg_stream)
+    # t0.setDaemon(True)
+    # t0.start()
+
     # start rest api server
     t1 = threading.Thread(target = start_rest_api)
     t1.setDaemon(True)
@@ -78,7 +69,7 @@ if __name__ == "__main__":
     s = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
     s.bind((HOST,USER_PORT))
     s.listen(10)
-    
+
     # main loop for all incoming client
     while True:
         print("waiting for client connection...")
@@ -90,14 +81,14 @@ if __name__ == "__main__":
         StartTime = time.time()
         # if client connected, keeping processing its data
         while True:
-            fps = recv_request_from_socket(client) # receive from client
+            het = recv_request_from_socket(client) # receive from client
 
-            if fps is False:
-                FPS.append(Default_FPS)
+            if het is False:
+                HET.append(Default_HET)
                 print("client droped, break, waiting other clients")
                 break
-            
-            FPS.append(fps)  # record the fps
+
+            HET.append(het)  # record the fps
 
             reply_data = '8\n'
 
@@ -105,7 +96,7 @@ if __name__ == "__main__":
 
             StartTime = time.time() # reset start time
             count += 1
-        
+
         client.close()
 
 
