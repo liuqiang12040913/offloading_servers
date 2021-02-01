@@ -1,6 +1,6 @@
 
 import socket, time, sys, struct, os
-import cv2, pickle, threading
+import pickle, threading
 import numpy as np
 from flask import request, url_for
 from flask_api import FlaskAPI, status, exceptions
@@ -85,6 +85,7 @@ def start_rest_api():
 
 
 def get_frames_from_video_file(path='test.mp4'):
+    import cv2
     frames = {}
     encode_param = [int(cv2.IMWRITE_JPEG_QUALITY), 10]
     cv_capture = cv2.VideoCapture(path)
@@ -207,8 +208,3 @@ if __name__ == "__main__":
         X = threading.Thread(target = user_thread, args=(user,))
         X.setDaemon(True)
         X.start()
-            
-        
-
-
-            
