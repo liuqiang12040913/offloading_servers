@@ -1,6 +1,6 @@
 
 import socket, time, sys, struct, os
-import cv2, pickle, threading
+import pickle, threading
 import numpy as np
 from flask import request, url_for
 from flask_api import FlaskAPI, status, exceptions
