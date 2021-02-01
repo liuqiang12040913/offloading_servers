@@ -13,7 +13,7 @@ USER_PORT = 9001
 REST_PORT = USER_PORT + 1000
 
 SIZE = 100 # number of comparing images
-SOCKET_TIME_OUT = 100
+SOCKET_TIME_OUT = 10
 INFOS = [100] # ms rtt
 FOLDER = 'images/'
 CWD = os.getcwd()
