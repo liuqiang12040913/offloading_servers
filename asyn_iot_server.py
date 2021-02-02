@@ -42,7 +42,7 @@ def function():
         return str(TRAFFIC), status.HTTP_202_ACCEPTED
     else:
         useful_len = int(len(INFOS)*0.5) # last 50%
-        avg_data = np.mean(INFOS[useful_len:]) # get average 
+        avg_data = int(100*np.mean(INFOS[useful_len:]))/100 # get average 
         INFOS = [INFOS[-1]] # reset the data
         # reset queue of all users
         for key, user in USERS.items():
