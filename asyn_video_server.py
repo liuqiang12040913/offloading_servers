@@ -200,7 +200,7 @@ if __name__ == "__main__":
         print("waiting for client connection...")
         client_sock, addr = s.accept()  # accept client
         user_id = str(idx)
-        user = (user_id, client_sock, Queue(10000))
+        user = (user_id, client_sock, Queue(1000))
         USERS[user_id] = user
         print ("new user socket id: ", user_id)
         idx += 1
