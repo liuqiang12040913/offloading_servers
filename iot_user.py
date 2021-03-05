@@ -2,7 +2,8 @@
 import socket, time, sys, struct, os, string, random
 import numpy as np
 
-HOST = '0.0.0.0'
+SERVER = '0.0.0.0'
+LOCAL = '0.0.0.0'
 USER_PORT = 9009
 
 PKT_SIZE = 1000 # size of pkt in Bytes
@@ -51,14 +52,16 @@ def recv_image_from_socket(client, buffers):
     return frame, id, buffers
 
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        HOST = sys.argv[1]
+    if len(sys.argv) == 3:
+        SERVER = sys.argv[1]
+        LOCAL = sys.argv[1]
     elif len(sys.argv) > 2:
         raise ValueError
 
     # bind to port to accept client
     client = socket.socket(socket.AF_INET,socket.SOCK_STREAM)
-    client.connect((HOST,USER_PORT))
+    client.bind((LOCAL, 0))
+    client.connect((SERVER,USER_PORT))
     
     id = 1000
     buffers = b''
