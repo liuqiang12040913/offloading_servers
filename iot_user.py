@@ -54,7 +54,7 @@ def recv_image_from_socket(client, buffers):
 if __name__ == "__main__":
     if len(sys.argv) == 3:
         SERVER = sys.argv[1]
-        LOCAL = sys.argv[1]
+        LOCAL = sys.argv[2]
     elif len(sys.argv) > 2:
         raise ValueError
 
