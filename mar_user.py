@@ -72,16 +72,18 @@ if __name__ == "__main__":
     size = len(data_byte)
     # main loop for all incoming client
     while True:
-        start_time = time.time()
-        client.sendall(struct.pack(">L", size) + data_byte)
+        try:
+            start_time = time.time()
+            client.sendall(struct.pack(">L", size) + data_byte)
 
-        recv_data = client.recv(1024)
+            recv_data = client.recv(1024)
 
-        delay = int(1000*(time.time() - start_time)) # ms 
-        print("len:", size, 'delay:', delay)
+            delay = int(1000*(time.time() - start_time)) # ms 
+            print("len:", size, 'delay:', delay)
 
-        r = requests.post('http://'+SERVER+':'+str(USER_PORT+1000)+'/', data ={'perf':str(delay)}) 
-        time.sleep(1)
+            r = requests.post('http://'+SERVER+':'+str(USER_PORT+1000)+'/', data ={'perf':str(delay)}) 
+            time.sleep(1)
+        except:break
         
 
 
